@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<robot name="xerbo" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find xerbo_description)/src/urdf/create_base.urdf.xacro" />
+
+  <xacro:create_base wheel_separation="0.235" base_diameter="0.3485">
+    <mesh filename="package://xerbo_description/src/meshes/xerbo.dae" />
+  </xacro:create_base>
+</robot>
