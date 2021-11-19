@@ -5,7 +5,7 @@
     <xacro:property name="imu_z_size" value="0.02" />
 
     <xacro:macro name="create_imu" params="connected_to">
-        <xacro:include filename="$(find xerbo_description)/urdf/imu_link_gazebo.urdf.xacro" />
+        <xacro:include filename="$(find xerbo_description)/urdf/create_imu_gazebo.urdf.xacro" />
 
         <link name="imu_link">
             <visual>
