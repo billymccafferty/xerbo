@@ -3,30 +3,32 @@
   <xacro:macro name="sim_create_base">
     <gazebo>
       <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>${diffdrive_update_rate}</updateRate>
-        <leftJoint>left_wheel_joint</leftJoint>
-        <rightJoint>right_wheel_joint</rightJoint>
-        <wheelSeparation>${wheel_separation}</wheelSeparation>
-        <wheelDiameter>${wheel_radius * 2}</wheelDiameter>
-        <wheelTorque>${wheel_torque}</wheelTorque>
-        <!--wheelAcceleration>${wheel_accel}</wheelAcceleration-->
-        <commandTopic>cmd_vel</commandTopic>
-        <odometryTopic>odom</odometryTopic>
-        <odometryFrame>odom</odometryFrame>
-        <robotBaseFrame>base_footprint</robotBaseFrame>
+        <always_on>true</always_on>
+        <update_rate>${diffdrive_update_rate}</update_rate>
+        <left_joint>left_wheel_joint</left_joint>
+        <right_joint>right_wheel_joint</right_joint>
+        <wheel_separation>${wheel_separation}</wheel_separation>
+        <wheel_diameter>${wheel_radius * 2}</wheel_diameter>
+        <wheel_torque>${wheel_torque}</wheel_torque>
+        <command_topic>cmd_vel</command_topic>
+        <odometry_topic>odom</odometry_topic>
+        <odometry_frame>odom</odometry_frame>
+        <robot_base_frame>base_footprint</robot_base_frame>
+
+        <publish_odom>true</publish_odom>
+        <publish_odom_tf>true</publish_odom_tf>
+        <publish_wheel_tf>true</publish_wheel_tf>
       </plugin>
 
       <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>100.0</updateRate>
-        <bodyName>base_link</bodyName>
-        <topicName>simple_controller/absolute_position</topicName>
-        <gaussianNoise>0</gaussianNoise>
-        <frameName>map</frameName>
-        <xyzOffsets>0 0 0</xyzOffsets>
-        <rpyOffsets>0 0 0</rpyOffsets>
-        <!--<interface:position name="p3d_base_position"/>-->
+        <always_on>true</always_on>
+        <update_rate>100.0</update_rate>
+        <body_name>base_link</body_name>
+        <topic_name>simple_controller/absolute_position</topic_name>
+        <gaussian_noise>0</gaussian_noise>
+        <frame_name>map</frame_name>
+        <xyz_offsets>0 0 0</xyz_offsets>
+        <rpy_offsets>0 0 0</rpy_offsets>
       </plugin>
     </gazebo>
 
@@ -35,8 +37,8 @@
       <mu2>1.0</mu2>
       <kp>1000000.0</kp>
       <kd>100.0</kd>
-      <minDepth>0.001</minDepth>
-      <maxVel>1.0</maxVel>
+      <min_depth>0.001</min_depth>
+      <max_vel>1.0</max_vel>
     </gazebo>
 
     <gazebo reference="right_wheel_link">
@@ -44,16 +46,16 @@
       <mu2>1.0</mu2>
       <kp>1000000.0</kp>
       <kd>100.0</kd>
-      <minDepth>0.001</minDepth>
-      <maxVel>1.0</maxVel>
+      <min_depth>0.001</min_depth>
+      <max_vel>1.0</max_vel>
     </gazebo>
     <gazebo reference="rear_wheel_link">
       <mu1>0.0</mu1>
       <mu2>0.0</mu2>
       <kp>1000000.0</kp>
       <kd>100.0</kd>
-      <minDepth>0.001</minDepth>
-      <maxVel>1.0</maxVel>
+      <min_depth>0.001</min_depth>
+      <max_vel>1.0</max_vel>
     </gazebo>
 
     <gazebo reference="front_wheel_link">
@@ -61,23 +63,30 @@
       <mu2>0.0</mu2>
       <kp>1000000.0</kp>
       <kd>100.0</kd>
-      <minDepth>0.001</minDepth>
-      <maxVel>1.0</maxVel>
+      <min_depth>0.001</min_depth>
+      <max_vel>1.0</max_vel>
     </gazebo>
   </xacro:macro>
 
   <xacro:macro name="sim_imu">
     <gazebo>
-      <plugin name="imu_controller" filename="libgazebo_ros_imu.so">
-        <alwaysOn>true</alwaysOn>
-        <updateRate>30</updateRate>
-        <bodyName>gyro_link</bodyName>
-        <topicName>imu/data</topicName>
-        <serviceName>imu/is_calibrated</serviceName>
-        <gaussianNoise>${0.0017*0.0017}</gaussianNoise>
-        <xyzOffsets>0 0 0</xyzOffsets>
-        <rpyOffsets>0 0 0</rpyOffsets>
-      </plugin>
+      <sensor name="imu_sensor" type="imu">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+        <topic>__default_topic__</topic>
+        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+          <topic_name>imu_qq</topic_name>
+          <body_name>gyro_link</body_name>
+          <update_rate_hz>10.0</update_rate_hz>
+          <gaussian_noise>${0.0017*0.0017}</gaussian_noise>
+          <xyz_offset>0 0 0</xyz_offset>
+          <rpy_offset>0 0 0</rpy_offset>
+          <frame_name>imu_link</frame_name>
+          <initial_orientation_as_reference>false</initial_orientation_as_reference>
+        </plugin>
+        <pose>0 0 0 0 0 0</pose>
+      </sensor>
     </gazebo>
   </xacro:macro>
 
