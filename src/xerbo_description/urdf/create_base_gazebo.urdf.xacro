@@ -15,9 +15,11 @@
         <odometry_frame>odom</odometry_frame>
         <robot_base_frame>base_footprint</robot_base_frame>
 
+        <!--
         <publish_odom>true</publish_odom>
         <publish_odom_tf>true</publish_odom_tf>
         <publish_wheel_tf>true</publish_wheel_tf>
+        -->
       </plugin>
 
       <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
@@ -65,28 +67,6 @@
       <kd>100.0</kd>
       <min_depth>0.001</min_depth>
       <max_vel>1.0</max_vel>
-    </gazebo>
-  </xacro:macro>
-
-  <xacro:macro name="sim_imu">
-    <gazebo>
-      <sensor name="imu_sensor" type="imu">
-        <always_on>true</always_on>
-        <update_rate>100</update_rate>
-        <visualize>true</visualize>
-        <topic>__default_topic__</topic>
-        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-          <topic_name>imu_qq</topic_name>
-          <body_name>gyro_link</body_name>
-          <update_rate_hz>10.0</update_rate_hz>
-          <gaussian_noise>${0.0017*0.0017}</gaussian_noise>
-          <xyz_offset>0 0 0</xyz_offset>
-          <rpy_offset>0 0 0</rpy_offset>
-          <frame_name>imu_link</frame_name>
-          <initial_orientation_as_reference>false</initial_orientation_as_reference>
-        </plugin>
-        <pose>0 0 0 0 0 0</pose>
-      </sensor>
     </gazebo>
   </xacro:macro>
 

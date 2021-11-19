@@ -14,4 +14,7 @@
     <!-- "file://" syntax is compatible with both RVIZ and Gazebo -->
     <mesh filename="file://$(find xerbo_description)/meshes/xerbo.dae" />
   </xacro:create_base>
+
+  <xacro:include filename="$(find xerbo_description)/urdf/imu_link.urdf.xacro" />
+  <xacro:create_imu connected_to="base_link" />
 </robot>
