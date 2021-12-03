@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="imu_x_size" value="0.04" />
+  <xacro:property name="imu_y_size" value="0.08" />
+  <xacro:property name="imu_z_size" value="0.02" />
+
+  <link name="imu_link">
+    <visual>
+      <geometry>
+        <box size="${imu_x_size} ${imu_y_size} ${imu_z_size}"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <geometry>
+        <box size="${imu_x_size} ${imu_y_size} ${imu_z_size}"/>
+      </geometry>
+    </collision>
+
+    <xacro:box_inertia m="0.1" w="0.1" d="0.1" h="0.1"/>
+  </link>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0.5"/>
+  </joint>
+
+  <xacro:include filename="$(find xerbo_description)/urdf/imu.gazebo.urdf.xacro" />
+
+</robot>

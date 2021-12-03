@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Define robot constants -->
+  <xacro:property name="wheel_separation" value="0.235"/>
+  <xacro:property name="wheel_radius" value="0.036"/>
+  <xacro:property name="wheel_width" value="0.024"/>
+  <xacro:property name="wheel_torque" value="1.0"/>
+  <xacro:property name="wheel_accel" value="1.8"/>
+
+  <!-- Robot Base -->
+  <link name="base_link">
+    <inertial>
+      <mass value="2" />
+      <origin xyz="0 0 0.0" />
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.5" />
+    </inertial>
+
+    <visual>
+      <origin xyz=" 0 0 0.0308" rpy="0 0 0" />
+      <geometry>
+        <!-- "file://" syntax is compatible with both RVIZ and Gazebo -->
+        <mesh filename="file://$(find xerbo_description)/meshes/base.dae" />
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin xyz="0.0 0.0 0.0308" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.0611632" radius="0.16495" />
+      </geometry>
+    </collision>
+  </link>
+  
+   <!-- Robot Footprint -->
+  <link name="base_footprint">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.001 0.001 0.001" />
+      </geometry>
+      <material name="Green" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0.017" rpy="0 0 0" />
+      <geometry>
+        <box size="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 0.017" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+  </joint>
+
+  <!-- Wheels -->
+  <xacro:macro name="create_wheel" params="prefix y_offset wheel_radius wheel_width">">
+    <link name="${prefix}_link">
+      <inertial>
+        <origin xyz="0 0 0" />
+        <mass value="0.01" />
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} ${pi/2}"/>
+        <geometry>
+            <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} ${pi/2}"/> 
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}_joint" type="continuous">
+      <origin xyz="0 ${y_offset} 0.015" rpy="0 0 0" />
+      <parent link="base_link"/>
+      <child link="${prefix}_link"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:create_wheel prefix="drivewhl_l" y_offset="${wheel_separation / 2}" wheel_radius="${wheel_radius}" wheel_width="${wheel_width}"/>
+  <xacro:create_wheel prefix="drivewhl_r" y_offset="${wheel_separation / -2}" wheel_radius="${wheel_radius}" wheel_width="${wheel_width}"/>
+
+  <link name="front_caster">
+    <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.01" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 ${pi/2} ${pi/2}" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 ${pi/2} ${pi/2}" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="caster_joint" type="fixed">
+    <origin xyz="0.13 0 0.0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="front_caster"/>
+    <axis xyz="0 1 0" />
+  </joint>
+
+  <link name="wall_sensor_link">
+    <inertial>
+      <mass value="0.01" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="base_wall_sensor_joint" type="fixed">
+    <origin xyz="0.09 -0.120 0.042" rpy="0 0 -1.0" />
+    <parent link="base_link" />
+    <child link="wall_sensor_link" />
+  </joint>
+
+  <link name="left_cliff_sensor_link">
+    <inertial>
+      <mass value="0.01" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="base_left_cliff_sensor_joint" type="fixed">
+    <origin xyz="0.07 0.14 0.01" rpy="0 ${pi/2} 0" />
+    <parent link="base_link" />
+    <child link="left_cliff_sensor_link" />
+  </joint>
+
+  <link name="right_cliff_sensor_link">
+    <inertial>
+      <mass value="0.01" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="base_right_cliff_sensor_joint" type="fixed">
+    <origin xyz="0.07 -0.14 0.01" rpy="0 ${pi/2} 0" />
+    <parent link="base_link" />
+    <child link="right_cliff_sensor_link" />
+  </joint>
+
+  <link name="leftfront_cliff_sensor_link">
+    <inertial>
+      <mass value="0.01" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
+    </inertial>
+  </link>
+
+  <joint name="base_leftfront_cliff_sensor_joint" type="fixed">
+    <origin xyz="0.15 0.04 0.01" rpy="0 ${pi/2} 0" />
+    <parent link="base_link" />
+    <child link="leftfront_cliff_sensor_link" />
+  </joint>
+
+  <link name="rightfront_cliff_sensor_link">
+    <inertial>
+      <mass value="0.01" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="base_rightfront_cliff_sensor_joint" type="fixed">
+    <origin xyz="0.15 -0.04 0.01" rpy="0 ${pi/2} 0" />
+    <parent link="base_link" />
+    <child link="rightfront_cliff_sensor_link" />
+  </joint>
+
+  <xacro:include filename="$(find xerbo_description)/urdf/base.gazebo.urdf.xacro" />
+
+</robot>
