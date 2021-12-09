@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <!-- Top of base is z = 0.072-->
+
   <!-- Define robot constants -->
   <xacro:property name="wheel_separation" value="0.235"/>
   <xacro:property name="wheel_radius" value="0.036"/>
@@ -12,12 +14,12 @@
   <link name="base_link">
     <inertial>
       <mass value="2" />
-      <origin xyz="0 0 0.0" />
+      <origin xyz="0 0 0" />
       <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.5" />
     </inertial>
 
     <visual>
-      <origin xyz=" 0 0 0.0308" rpy="0 0 0" />
+      <origin xyz="0 0 0.0308" rpy="0 0 0" />
       <geometry>
         <!-- "file://" syntax is compatible with both RVIZ and Gazebo -->
         <mesh filename="file://$(find xerbo_description)/meshes/base.dae" />
