@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="mounting_plate_radius" value="0.1524" />
+  <xacro:property name="mounting_plate_length" value="0.00746125" />
+
+  <xacro:macro name="create_plate_link" params="name_prefix origin_z">
+    <link name="${name_prefix}_plate_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.205"/>
+        <inertia ixx="0.001"  ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+      </inertial>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${mounting_plate_radius}" length="${mounting_plate_length}"/>
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${mounting_plate_radius}" length="${mounting_plate_length}"/>
+        </geometry>
+        <material name="black-opaque">
+          <color rgba="0 0 0 0.75"/>
+        </material>
+      </visual>
+    </link>
+      
+    <joint name="${name_prefix}_plate_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${name_prefix}_plate_link"/>
+      <origin xyz="0 0 ${origin_z}" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:create_plate_link name_prefix="first" origin_z="0.1497875" />
+  <xacro:create_plate_link name_prefix="second" origin_z="0.20535" />
+
+</robot>
