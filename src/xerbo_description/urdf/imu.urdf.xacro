@@ -22,7 +22,7 @@
         <box size="${imu_x_size} ${imu_y_size} ${imu_z_size}"/>
       </geometry>
       <material name="hunter-green">
-        <color rgba="255 87 51 1"/>
+        <color rgba="1 0.34 0.2 1.0"/>
       </material>
     </visual>
   </link>
